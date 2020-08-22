@@ -28,10 +28,39 @@ AddEventHandler('tp:hasExitedMarker', function(zone)
 	CurrentAction = nil
 end)
 
+
+
+
+-- Display markers
+Citizen.CreateThread(function()
+    while true do
+
+        Citizen.Wait(10)
+        if visible then
+
+            local coords = GetEntityCoords(GetPlayerPed(-1))
+
+            for k,v in pairs(Config.Zones) do
+                if(v.Type ~= -1 and GetDistanceBetweenCoords(coords, v.Pos.x, v.Pos.y, v.Pos.z, true) < Config.DrawDistance) then
+                    DrawMarker(v.Type, v.Pos.x, v.Pos.y, v.Pos.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, v.Size.x, v.Size.y, v.Size.z, v.Color.r, v.Color.g, v.Color.b, 100, false, false, 2, false, false, false, false)
+                end
+            end
+
+        end
+
+    end
+end)
+
+-- hatalı error
+
+--[[ Enter / Exit marker events
+
+
+
 -- Display markers
 Citizen.CreateThread(function()
 	while true do
-		Wait(0)
+		Citizen.Wait(10)
 
 		local coords = GetEntityCoords(GetPlayerPed(-1))
 
@@ -75,7 +104,9 @@ Citizen.CreateThread(function()
 	end
 end)
 
--- Enter / Exit marker events
+
+
+
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
@@ -89,6 +120,7 @@ Citizen.CreateThread(function()
 				isInMarker  = true
 				currentZone = zone
 				break
+				
 			end
 		end
 
@@ -104,6 +136,41 @@ Citizen.CreateThread(function()
 		end
 
 	end
+end)
+--]]
+
+-- Enter / Exit marker events
+Citizen.CreateThread(function()
+    while true do
+
+        Citizen.Wait(10)
+        if visible then
+
+            local coords      = GetEntityCoords(GetPlayerPed(-1))
+            local isInMarker  = false
+            local currentZone = nil
+
+            for zone, data in pairs(Config.zones) do
+                if(GetDistanceBetweenCoords(coords, v.Pos.x, v.Pos.y, v.Pos.z, true) < v.Size.x) then
+                    isInMarker  = true
+                    currentZone = k
+                end
+            end
+
+            if (isInMarker and not HasAlreadyEnteredMarker) or (isInMarker and LastZone ~= currentZone) then
+                HasAlreadyEnteredMarker = true
+                LastZone                = currentZone
+                TriggerEvent('tp:hasEnteredMarker', currentZone)
+            end
+
+            if not isInMarker and HasAlreadyEnteredMarker then
+                HasAlreadyEnteredMarker = false
+                TriggerEvent('tp:hasExitedMarker', LastZone)
+            end
+
+        end
+
+    end
 end)
 
 -- TP if in marker
