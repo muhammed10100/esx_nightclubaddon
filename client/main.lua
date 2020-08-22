@@ -84,7 +84,7 @@ Citizen.CreateThread(function()
 		local isInMarker  = false
 		local currentZone = nil
 
-		for zone, data in pairs(Config.zones) do
+		for zone, data in pairs(Config.zones) do -- error
 			if GetDistanceBetweenCoords(coords, data.x, data.y, data.z, true) < (data.w / 2) then
 				isInMarker  = true
 				currentZone = zone
