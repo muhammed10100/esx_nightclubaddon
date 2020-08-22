@@ -34,10 +34,10 @@ Config.zones = {
 			g = 0,
 			b = 0
 		}
-	},
+	}
 }
 
---L
+--[[
 Config.point = {
 
 	NightclubEnter = {
@@ -60,3 +60,5 @@ Config.auto = {
 	'NightclubEnter',
 	'NightclubExit'
 }
+--]]
+
